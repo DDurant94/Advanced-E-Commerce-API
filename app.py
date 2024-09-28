@@ -21,9 +21,11 @@ from routes.orderBP import order_blueprint
 from routes.productBP import product_blueprint
 from routes.roleBP import role_blueprint
 
+# swagger url http://127.0.0.1:5000/api/docs
 SWAGGER_URL = '/api/docs'
 API_URL = '/static/swagger.yaml'
 
+#adding the app name
 swagger_blueprint = get_swaggerui_blueprint(
   SWAGGER_URL,
   API_URL,
@@ -32,6 +34,7 @@ swagger_blueprint = get_swaggerui_blueprint(
   }
 )
 
+# creating the app
 def create_app(config_name):
   app = Flask(__name__)
   
@@ -42,9 +45,9 @@ def create_app(config_name):
   limiter.init_app(app)
   CORS(app)
   
-  
   return app
 
+# endpoints config for the app to be usable
 def blue_print_config(app):
   app.register_blueprint(customer_blueprint, url_prefix='/customers')
   app.register_blueprint(customer_account_blueprint,url_prefix='/customer-accounts')
@@ -61,16 +64,6 @@ def configure_rate_limit():
   limiter.limit("100 per day")(product_blueprint)
   limiter.limit("100 per day")(role_blueprint)
   limiter.limit("100 per day")(swagger_blueprint)
-
-def init_roles_data():
-  with Session(db.engine) as session:
-    with session.begin():
-      roles = [
-        Role(role_name = 'admin'),
-        Role(role_name = 'user'),
-        Role(role_name = 'guest')
-      ]
-      session.add_all(roles)
 
 if __name__ == '__main__':
   app = create_app('DevelopmentConfig')

@@ -2,6 +2,7 @@ from flask import request, jsonify
 from models.schemas.orderSchema import order_schema,orders_schema,order_schema_customer
 from services import orderService
 from marshmallow import ValidationError
+from caching import cache
 from utils.util import token_required, role_required
 
 @token_required
@@ -17,6 +18,7 @@ def save():
   except ValueError as e:
     return jsonify({"error": str(e)}),400
 
+@cache.cached(timeout=60)
 @token_required
 @role_required('admin')
 def find_all():
@@ -24,6 +26,7 @@ def find_all():
   per_page=request.args.get('per_page',10,type=int)
   return orders_schema.jsonify(orderService.find_all(page=page,per_page=per_page)),200
 
+@cache.cached(timeout=60)
 @token_required
 def find_by_id(id):
   order= orderService.find_by_id(id)
