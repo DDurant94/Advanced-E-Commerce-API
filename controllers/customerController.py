@@ -5,6 +5,12 @@ from marshmallow import ValidationError
 from caching import cache
 from utils.util import token_required, role_required
 
+# token and or role is needed for each endpoint validating access to each endpoint
+
+# Controllers validates and serializes information for and from requests sent to the API
+
+# creating a customer from json data sent to the API using endpoint associated
+# admin required
 @token_required
 @role_required('admin')
 def save():
@@ -19,6 +25,8 @@ def save():
   else:
     return jsonify({"message": "Fallback method error activated", "body":customer_data}), 400
 
+# getting all customers
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -33,6 +41,8 @@ def find_all():
     }
     return jsonify(resp), 400
 
+# getting all customers pagination
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -49,6 +59,8 @@ def find_all_pagination():
     }
     return jsonify(resp), 400
 
+# getting customers by id
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -56,6 +68,8 @@ def find_by_id(id):
   customer = customerService.find_by_id(id)
   return customer_schema.jsonify(customer),200
 
+# updating a customer from json data sent to the API using endpoint associated
+# admin required 
 @token_required
 @role_required('admin')
 def update(id):
@@ -69,6 +83,8 @@ def update(id):
   except ValueError as e:
     return jsonify({"error": str(e)}),400  
 
+# deleting a customer 
+# admin required 
 @token_required
 @role_required('admin')
 def delete(id):

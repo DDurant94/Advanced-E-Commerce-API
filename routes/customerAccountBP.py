@@ -1,6 +1,7 @@
 from flask import Blueprint
 from controllers.customerAccountController import save,find_all,login,find_by_id,update,delete
 
+# all the url endpoints for customer accounts
 customer_account_blueprint = Blueprint('customer_account_bp',__name__)
 customer_account_blueprint.route('/create-account',methods=['POST'])(save)
 customer_account_blueprint.route('/',methods=['GET'])(find_all)

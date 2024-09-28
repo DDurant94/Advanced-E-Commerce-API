@@ -7,7 +7,8 @@ from models.customer import Customer
 from models.product import Product
 from models.orderProduct import OrderProducts
 
-
+# Creating order
+# also remove stocks quantity form products to ensure easy inventory management
 def save(order_data):
   with Session(db.engine) as session:
     with session.begin():
@@ -51,6 +52,7 @@ def save(order_data):
       
     return new_order
 
+# getting all orders
 def find_all(page=1,per_page=10):
   subquery = select(OrderProducts.order_id).join(Product,OrderProducts.product_id == Product.id).subquery()
   orders=db.paginate(select(Order).join(OrderProducts, Order.id == OrderProducts.order_id).join(
@@ -58,6 +60,7 @@ def find_all(page=1,per_page=10):
     Order.id.in_(select(subquery.c.order_id))).group_by(Order.id),page=page,per_page=per_page)
   return orders
 
+# getting order by ID 
 def find_by_id(id):
   query = select(Order).filter_by(id=id)
   order = db.session.execute(query).scalar_one_or_none()

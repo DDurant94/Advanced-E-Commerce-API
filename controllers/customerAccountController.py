@@ -5,6 +5,12 @@ from marshmallow import ValidationError
 from caching import cache
 from utils.util import token_required, role_required
 
+# token and or role is needed for each endpoint validating access to each endpoint
+
+# Controllers validates and serializes information for and from requests sent to the API
+
+# creating a customer account from json data sent to the API using endpoint associated
+# admin required
 @token_required
 @role_required('admin')
 def save():
@@ -18,6 +24,9 @@ def save():
   except ValueError as e:
     return jsonify({"error": str(e)}),400
 
+
+# getting all customer accounts 
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -25,6 +34,7 @@ def find_all():
   customer_accounts = customerAccountService.find_all()
   return customer_accounts_schema.jsonify(customer_accounts),200
 
+# logging into an account
 @cache.cached(timeout=60)
 def login():
   customer = request.json
@@ -38,6 +48,9 @@ def login():
     }
     return jsonify(resp), 400
 
+
+# getting account by id
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -45,6 +58,9 @@ def find_by_id(id):
   customer = customerAccountService.find_by_id(id)
   return customer_account_schema.jsonify(customer),200
 
+
+# updating a customer account from json data sent to the API using endpoint associated
+# admin required 
 @token_required
 @role_required('admin')
 def update(id):
@@ -58,7 +74,9 @@ def update(id):
     return add_customer_account_schema.jsonify(updated_customer),201
   except ValueError as e:
     return jsonify({"error": str(e)}),400
-  
+
+# deleting customer account
+# admin required
 @token_required
 @role_required('admin')
 def delete(id):

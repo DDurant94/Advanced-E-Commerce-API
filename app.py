@@ -47,7 +47,7 @@ def create_app(config_name):
   
   return app
 
-# endpoints config for the app to be usable
+# endpoints config for the app to be usable (base of all endpoints)
 def blue_print_config(app):
   app.register_blueprint(customer_blueprint, url_prefix='/customers')
   app.register_blueprint(customer_account_blueprint,url_prefix='/customer-accounts')
@@ -56,7 +56,7 @@ def blue_print_config(app):
   app.register_blueprint(role_blueprint,url_prefix='/roles')
   app.register_blueprint(swagger_blueprint,url_prefix=SWAGGER_URL)
   
-
+# setting endpoint limits
 def configure_rate_limit():
   limiter.limit("100 per day")(customer_blueprint)
   limiter.limit("100 per day")(customer_account_blueprint)

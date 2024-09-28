@@ -6,6 +6,12 @@ from caching import cache
 
 from utils.util import token_required,role_required
 
+# token and or role is needed for each endpoint validating access to each endpoint
+
+# Controllers validates and serializes information for and from requests sent to the API
+
+# creating a product from json data sent to the API using endpoint associated
+# admin required
 @token_required
 @role_required('admin')
 def save():
@@ -19,6 +25,7 @@ def save():
   except ValueError as e:
     return jsonify({"error": str(e)}),400
   
+# getting all products with pagination
 @cache.cached(timeout=60)
 @token_required
 def find_all():
@@ -26,12 +33,15 @@ def find_all():
   per_page=request.args.get('per_page',10,type=int)
   return products_schema.jsonify(productService.find_all(page=page,per_page=per_page)), 200
 
+# getting products by id
 @cache.cached(timeout=60)
 @token_required
 def find_by_id(id):
   product = productService.find_by_id(id)
   return product_schema.jsonify(product),200
 
+# updating a product from json data sent to the API using endpoint associated
+# admin required 
 @token_required
 @role_required('admin')
 def update(id):
@@ -45,6 +55,8 @@ def update(id):
   except ValueError as e:
     return jsonify({"error": str(e)}),400
 
+# deleting a product 
+# admin required 
 @token_required
 @role_required('admin')  
 def delete(id):

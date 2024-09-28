@@ -1,6 +1,8 @@
 from database import db,Base
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import List
+
+# Customer Account database table
 class CustomerAccount(Base):
   __tablename__ = 'Customer_Accounts'
   id: Mapped[int] = mapped_column(primary_key=True)

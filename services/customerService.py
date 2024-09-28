@@ -11,6 +11,7 @@ from models.orderProduct import OrderProducts
 def fallback_function(customer):
   return None
 
+# adding customer and circuit breaker if name == "Failure keeping the integrity of information if the API is having problems"
 @circuit(failure_threshold=1,recovery_timeout=10,fallback_function=fallback_function)
 def save(customer_data):
   try:
@@ -28,6 +29,7 @@ def save(customer_data):
   except Exception as e:
     raise e
 
+# getting all customers
 def find_all():
   query = select(Customer)
   customers = db.session.execute(query).scalars().all()
@@ -37,11 +39,13 @@ def find_all_pagination(page=1,per_page=10):
   customers = db.paginate(select(Customer), page=page, per_page=per_page)
   return customers
 
+# getting customer by ID
 def find_by_id(id):
   query = select(Customer).filter_by(id=id)
   customer = db.session.execute(query).unique().scalar_one_or_none()
   return customer
 
+# updating customer information
 def update(customer_data, id):
   with Session(db.engine) as session:
     with session.begin():
@@ -53,6 +57,7 @@ def update(customer_data, id):
     db.session.commit()
   return customer
 
+# deleting customer and all associations with customer (customer account, and orders)
 def delete(id):
   with Session(db.engine) as session:
     with session.begin():

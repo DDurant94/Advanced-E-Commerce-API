@@ -2,6 +2,7 @@ from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
 from typing import List
 
+# Product database table
 class Product(Base):
   __tablename__ = 'Products'
   id: Mapped[int] = mapped_column(primary_key=True)

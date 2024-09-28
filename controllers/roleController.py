@@ -9,6 +9,12 @@ from services import roleService
 
 from utils.util import token_required,role_required
 
+# token and or role is needed for each endpoint validating access to each endpoint
+
+# Controllers validates and serializes information for and from requests sent to the API
+
+# creating a role from json data sent to the API using endpoint associated
+# admin required
 @token_required
 @role_required('admin')
 def save():
@@ -21,7 +27,9 @@ def save():
     return role_schema.jsonify(role_save),201
   except ValueError as e:
     return jsonify({"error": str(e)}),400
-  
+
+# finding all roles using endpoint associated
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -29,6 +37,8 @@ def find_all():
   roles = roleService.find_all()
   return roles_schema.jsonify(roles), 200
 
+# updating a role from json data sent to the API using endpoint associated
+# admin required
 @token_required
 @role_required('admin')
 def update(id):

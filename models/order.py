@@ -3,6 +3,7 @@ from database import db, Base
 import datetime
 from sqlalchemy.orm import Mapped, mapped_column
 
+# Order database table
 class Order(Base):
   __tablename__ = 'Orders'
   id: Mapped[int] = mapped_column(primary_key=True)

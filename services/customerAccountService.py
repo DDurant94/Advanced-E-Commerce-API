@@ -12,6 +12,7 @@ from models.customerAccount import CustomerAccount
 from models.role import Role
 from models.customerManagementRole import CustomerManagementRole as CMR
 
+# adding account with an associated role attached to the account
 def save(customer_account_data):
   with Session(db.engine) as session:
     with session.begin():
@@ -42,7 +43,7 @@ def save(customer_account_data):
     session.refresh(new_customer_account)
   return new_customer_account
   
-  
+# getting all accounts
 def find_all():
   query = select(CustomerAccount).join(Customer).where(Customer.id == CustomerAccount.customer_id)
   customer_accounts = db.session.execute(query).unique().scalars().all()
@@ -64,12 +65,14 @@ def login_customer(username,password):
       return None
   else:
     return None
-  
+
+# getting account by ID 
 def find_by_id(id):
   query = select(CustomerAccount).join(Customer).where(Customer.id == CustomerAccount.customer_id).filter_by(id=id)
   account = db.session.execute(query).unique().scalar_one_or_none()
   return account
 
+# updating account information
 def update(customer_update_data, id):
   with Session(db.engine) as session:
     with session.begin():
@@ -81,7 +84,7 @@ def update(customer_update_data, id):
     db.session.commit()
   return account
       
-      
+# deleting account 
 def delete(id):
   with Session(db.engine) as session:
     with session.begin():

@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
 from database import db
-from circuitbreaker import circuit
 from sqlalchemy import select
 
 from models.role import Role
 
+# adding role
 def save(role_data):
   with Session(db.engine) as session:
     with session.begin():
@@ -14,11 +14,13 @@ def save(role_data):
     session.refresh(new_role)
   return new_role
 
+# getting all roles
 def find_all():
   query= select(Role)
   roles = db.session.execute(query).scalars().all()
   return roles
 
+# changing role information
 def update(role_update_data, id):
   with Session(db.engine) as session:
     with session.begin():

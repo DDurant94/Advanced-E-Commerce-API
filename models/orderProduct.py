@@ -1,6 +1,7 @@
 from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
 
+# Order Product database table (association table) to hold product_id and quantity 
 class OrderProducts(Base):
   __tablename__ = 'Order_product'
   order_id: Mapped[int] = mapped_column(db.ForeignKey('Orders.id'),primary_key = True)

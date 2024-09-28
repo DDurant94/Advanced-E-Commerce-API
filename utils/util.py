@@ -8,6 +8,7 @@ from flask import request,jsonify
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+# encoding the token used for access to different endpoints 
 def encode_token(user_id, role_names):
   payload= {
     'exp': datetime.now() + timedelta(days=1,hours=1),
@@ -19,6 +20,7 @@ def encode_token(user_id, role_names):
   token = jwt.encode(payload,SECRET_KEY,algorithm='HS256')
   return token
 
+# checking the token if its valid or not 
 def token_required(f):
   @wraps(f)
   def decorated(*args, **kwargs):
@@ -37,6 +39,7 @@ def token_required(f):
     return f(*args,**kwargs)
   return decorated
 
+# checking if the user has the role required to enter the endpoint
 def role_required(role):
   def decorator(f):
     @wraps(f)

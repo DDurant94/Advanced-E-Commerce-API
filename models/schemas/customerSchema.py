@@ -1,11 +1,14 @@
-from marshmallow import fields
+from marshmallow import fields,validate
 from schema import ma
 
+# Validation of data
+
+# customer schema
 class CustomerSchema(ma.Schema):
   id = fields.Integer(required=False)
-  name = fields.String(required=True)
-  email = fields.String(required=True)
-  phone = fields.String(required=True)
+  name = fields.String(required=True,validate=validate.Length(min=1))
+  email = fields.String(required=True,validate=validate.Length(min=1))
+  phone = fields.String(required=True,validate=validate.Length(min=1))
   
   class Meta:
     fields = ("id", "name", "email", "phone")

@@ -1,6 +1,7 @@
 from database import db, Base
 from sqlalchemy.orm import Mapped, mapped_column
 
+# Role database table
 class Role(Base):
   __tablename__ = "Roles"
   id: Mapped[int] = mapped_column(primary_key=True)

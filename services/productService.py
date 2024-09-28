@@ -6,6 +6,7 @@ from models.product import Product
 from models.order import Order
 from models.orderProduct import OrderProducts
 
+# Adding product to database
 def save(product_data):
   with Session(db.engine) as session:
     with session.begin():
@@ -14,7 +15,8 @@ def save(product_data):
       session.commit()
     session.refresh(new_product)
     return new_product
-  
+
+# Getting all products with pagination
 def find_all(page=1,per_page=10):
   products = db.paginate(select(Product),page=page,per_page=per_page)
   return products
@@ -24,6 +26,7 @@ def find_by_id(id):
   product = db.session.execute(query).unique().scalar_one_or_none()
   return product
 
+# updating a products information
 def update(product_data, id):
   with Session(db.engine) as session:
     with session.begin():
@@ -36,6 +39,7 @@ def update(product_data, id):
     db.session.commit()
   return product
 
+# deleting a product and associations
 def delete(id):
   with Session(db.engine) as session:
     with session.begin():

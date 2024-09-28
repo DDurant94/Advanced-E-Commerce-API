@@ -1,6 +1,9 @@
 from marshmallow import fields, validate
 from schema import ma
 
+# Validation of data 
+
+# Role schema
 class RoleSchema(ma.Schema):
   id = fields.Integer(required=False)
   role_name = fields.String(required=True, validate=validate.Length(min=1))

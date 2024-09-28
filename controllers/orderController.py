@@ -5,6 +5,11 @@ from marshmallow import ValidationError
 from caching import cache
 from utils.util import token_required, role_required
 
+# token and or role is needed for each endpoint validating access to each endpoint
+
+# Controllers validates and serializes information for and from requests sent to the API
+
+# creating a order from json data sent to the API using endpoint associated
 @token_required
 def save():
   try:
@@ -18,6 +23,8 @@ def save():
   except ValueError as e:
     return jsonify({"error": str(e)}),400
 
+# getting all orders
+# admin required
 @cache.cached(timeout=60)
 @token_required
 @role_required('admin')
@@ -26,6 +33,7 @@ def find_all():
   per_page=request.args.get('per_page',10,type=int)
   return orders_schema.jsonify(orderService.find_all(page=page,per_page=per_page)),200
 
+# getting orders by id
 @cache.cached(timeout=60)
 @token_required
 def find_by_id(id):
